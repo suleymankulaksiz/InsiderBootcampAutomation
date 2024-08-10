@@ -2,6 +2,8 @@ from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 from constants.home_page_loc import *
 from selenium.webdriver.common.action_chains import ActionChains
+import os
+import allure
 
 class PageBase:
 
@@ -11,9 +13,6 @@ class PageBase:
     def wait_element_visibility(self, locator):
         return WebDriverWait(self.driver, 10).until(expected_conditions.visibility_of_element_located(locator))
         
-    def wait_for_element_visible(self, by, value, timeout=10):
-        return WebDriverWait(self.driver, timeout).until(expected_conditions.visibility_of_element_located((by, value)))
-    
     def click_element(self,locator):
         self.wait_element_visibility(locator).click()
     
@@ -26,7 +25,17 @@ class PageBase:
     def find_element(self,locator):
         return self.driver.find_element(*locator)
     
+    def find_elements(self,locator):
+        return self.driver.find_elements(*locator)
+
     def doubleclick_element(self,locator):
         element = self.wait_element_visibility(locator)
         actions = ActionChains(self.driver)
         actions.double_click(element).perform()
+        
+    def take_screenshot(self, screenshotName):
+        file_path = os.path.join("images", screenshotName)
+        self.driver.save_screenshot(file_path)
+        
+        with open(file_path, 'rb') as f:
+            allure.attach(f.read(), name=screenshotName, attachment_type=allure.attachment_type.PNG)
