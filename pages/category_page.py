@@ -1,7 +1,6 @@
 import pytest
 from constants.category_page_loc import *
 from pages.base_page import *
-from selenium.webdriver.support import expected_conditions as EC
 
 @pytest.mark.usefixtures("setup")
 class CategoryPage(PageBase):
@@ -20,7 +19,7 @@ class CategoryPage(PageBase):
         self.take_screenshot("verifySecondPageClicked.png")
         self.driver.execute_script("window.scrollTo(0, 0);")
 
-    def click_product_from_list(self):
+    def click_product_from_list(self,index):
         #Burada sayfada yer alan sponsor etiketine sahip ürünleri filtreleme işlemi yaparak tıklamanın başarılı olması sağlanmıştır.
         all_products = self.find_elements(ALL_PRODUCT)
         not_sponsored_products = []
@@ -29,7 +28,7 @@ class CategoryPage(PageBase):
             if not sponsor_label:  
                 not_sponsored_products.append(product)
         if len(not_sponsored_products) >= 21:
-                target_product = not_sponsored_products[20]
+                target_product = not_sponsored_products[index]
                 target_product.find_element(By.CSS_SELECTOR, 'h2 a').click()
                 print(f"Ürüne tıklama başarılı: Konum {21}.")
         else:

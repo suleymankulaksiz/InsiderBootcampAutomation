@@ -1,9 +1,6 @@
 import pytest
 from constants.home_page_loc import *
 from pages.base_page import *
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.keys import Keys
-
 
 @pytest.mark.usefixtures("setup")
 class HomePage(PageBase):
